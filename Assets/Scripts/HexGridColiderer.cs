@@ -9,21 +9,22 @@ namespace Assets.Scripts
 {
     public class HexGridColiderer
     {
-        HexGridData UploadedMapData;
+        HexGridData MapData;
         List<GameObject> Coliders;
         GameObject ColiderPart;
 
         float widthInUnits;
         float heightInUnits;
 
-        public HexGridColiderer(HexGridData UploadedMapData)
+        public HexGridColiderer(HexGrid hexGrid)
         {
-            this.UploadedMapData = UploadedMapData;
+            this.MapData = hexGrid.MapData;
 
             ColiderPart = new GameObject("Colider Part");
+            ColiderPart.transform.parent = hexGrid.transform;
 
-            widthInUnits = UploadedMapData.width * HexMetrics.innerRadius * 2f * UploadedMapData.cellSize + (UploadedMapData.height > 1f ? HexMetrics.innerRadius * UploadedMapData.cellSize : 0);
-            heightInUnits = 1.5f * (UploadedMapData.height-1) * UploadedMapData.cellSize * HexMetrics.outerRadius + UploadedMapData.cellSize * HexMetrics.outerRadius * 2f;
+            widthInUnits = MapData.width * HexMetrics.innerRadius * 2f * MapData.cellSize + (MapData.height > 1f ? HexMetrics.innerRadius * MapData.cellSize : 0);
+            heightInUnits = 1.5f * (MapData.height-1) * MapData.cellSize * HexMetrics.outerRadius + MapData.cellSize * HexMetrics.outerRadius * 2f;
 
             Coliders = new List<GameObject>();
             ReUpdateAllColiders();
@@ -37,7 +38,7 @@ namespace Assets.Scripts
             }
             Coliders = new List<GameObject>();
             List<float> DifferentHeights = new List<float>();
-            foreach (float height in UploadedMapData.HeightMap)
+            foreach (float height in MapData.HeightMap)
                 if (!DifferentHeights.Contains(height)) DifferentHeights.Add(height);
 
             foreach (float height in DifferentHeights)
@@ -45,7 +46,7 @@ namespace Assets.Scripts
                 GameObject PlaneCollider = GameObject.CreatePrimitive(PrimitiveType.Cube);
                 PlaneCollider.name = "Colider " + height;
                 PlaneCollider.transform.parent = ColiderPart.transform;
-                PlaneCollider.transform.localPosition = new Vector3(widthInUnits / 2f - UploadedMapData.cellSize * HexMetrics.innerRadius, height - .0005f, heightInUnits / 2f - UploadedMapData.cellSize * HexMetrics.outerRadius);
+                PlaneCollider.transform.localPosition = new Vector3(widthInUnits / 2f - MapData.cellSize * HexMetrics.innerRadius, height - .0005f, heightInUnits / 2f - MapData.cellSize * HexMetrics.outerRadius);
                 PlaneCollider.transform.localScale = new Vector3(widthInUnits, .001f, heightInUnits);
 
                 GameObject.Destroy(PlaneCollider.GetComponent<MeshFilter>());
@@ -65,9 +66,10 @@ namespace Assets.Scripts
 
             foreach(RaycastHit hit in hits)
             {
-                Vector3 HexCoords = HexMetrics.CalcHexCoordXZFromDefault(hit.point, UploadedMapData.cellSize);
-                HexCoords = new Vector3(Mathf.Clamp(HexCoords.x, 0, UploadedMapData.width - 1), HexCoords.z, Mathf.Clamp(HexCoords.z, 0, UploadedMapData.height - 1));
-                if (Mathf.Approximately(hit.point.y, UploadedMapData.HeightMap[(int)HexCoords.z* UploadedMapData.width+ (int)HexCoords.x]))
+                Vector3 HexCoords = HexMetrics.CalcHexCoordXZFromDefault(hit.point, MapData.cellSize);
+                HexCoords = new Vector3(Mathf.Clamp(HexCoords.x, 0, MapData.width - 1), 0, Mathf.Clamp(HexCoords.z, 0, MapData.height - 1));
+                HexCoords += new Vector3(0, MapData.HeightMap[(int)HexCoords.z * MapData.width + (int)HexCoords.x],0);
+                if (Mathf.Approximately(hit.point.y, HexCoords.y))
                 {
                     HexOutput = HexCoords;
                     return true;

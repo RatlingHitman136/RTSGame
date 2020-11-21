@@ -6,17 +6,40 @@ using UnityEngine;
 public class TestRayCast : MonoBehaviour
 {
     public HexGrid hexGrid;
+    WorldEditor worldEditor;
 
+    private void Awake()
+    {
+        worldEditor = new WorldEditor(hexGrid.hexGridRenderer, hexGrid.hexGridColiderer,hexGrid.MapData);
+    }
     void Update()
     {
-        if (Input.GetMouseButtonDown(0))
+        if (Input.GetMouseButton(0))
         {
-            if(hexGrid.TryRaycastHexGrid(out Vector3 output,Camera.main.ScreenPointToRay(Input.mousePosition)));
+            if (hexGrid.TryRaycastHexGrid(out Vector3 output, Camera.main.ScreenPointToRay(Input.mousePosition))) 
             {
                 Debug.Log(output);
-                hexGrid.UpdateCellHeight(output, 1f);
+                worldEditor.TryUpdateCellHeight(output, .5f);
+            }
+                
+        }
+        if (Input.GetMouseButton(1))
+        {
+            if (hexGrid.TryRaycastHexGrid(out Vector3 output, Camera.main.ScreenPointToRay(Input.mousePosition))) 
+            {
+                Debug.Log(output);
+                worldEditor.TryUpdateCellHeight(output, -.5f);
             }
 
+        }
+
+        if(Input.GetMouseButton(2))
+        {
+            if (hexGrid.TryRaycastHexGrid(out Vector3 output, Camera.main.ScreenPointToRay(Input.mousePosition)))
+            {
+                Debug.Log(output);
+                worldEditor.TryUpdateCellHeightInRadius(output,.5f,3);
+            }
         }
     }
 }

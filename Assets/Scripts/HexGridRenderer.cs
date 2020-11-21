@@ -29,31 +29,30 @@ namespace Assets.Scripts
 
         }
 
-        public void UpdateHexGridMesh(Vector3[] HexagonsToUpdate)
+        public void UpdateHexGridMesh(List<Vector3> HexagonsToUpdate)
         {
             List<HexColumnRenderer> ColumsToUpdate = new List<HexColumnRenderer>();
+            List<int> XCoordColumsToUpdate = new List<int>();
 
             foreach(Vector3 HexagonCoord in HexagonsToUpdate)
             {
-                if (HexagonCoord.x == 0)
+                if (HexagonCoord.x != 0)
                 {
-                    ColumsToUpdate.Add(hexColumnRenderers[(int)HexagonCoord.x]);
+                    ColumsToUpdate.Add(hexColumnRenderers[(int)HexagonCoord.x - 1]);
+                    XCoordColumsToUpdate.Add((int)HexagonCoord.x - 1);
                 }
-                else
+                if (HexagonCoord.x != hexColumnRenderers.Length - 1)
                 {
-                    ColumsToUpdate.Add(hexColumnRenderers[(int)HexagonCoord.x]);
-                    ColumsToUpdate.Add(hexColumnRenderers[(int)HexagonCoord.x-1]);
+                    ColumsToUpdate.Add(hexColumnRenderers[(int)HexagonCoord.x + 1]);
+                    XCoordColumsToUpdate.Add((int)HexagonCoord.x + 1);
                 }
+                    ColumsToUpdate.Add(hexColumnRenderers[(int)HexagonCoord.x]);
+                XCoordColumsToUpdate.Add((int)HexagonCoord.x);
             }
 
-            Debug.Log(ColumsToUpdate.Count);
-            //for (int i = 0; i < ColumsToUpdate.Count; i++)
-            //{
-            //    ColumsToUpdate[i].UpdateColumn(i);
-            //}
-            for(int x = 0;x< MapData.width;x++)
+            for (int i = 0; i < ColumsToUpdate.Count; i++)
             {
-                hexColumnRenderers[x].UpdateColumn(x);
+                ColumsToUpdate[i].UpdateColumn(XCoordColumsToUpdate[i]);
             }
         }
 
