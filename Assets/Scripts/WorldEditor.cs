@@ -23,8 +23,9 @@ namespace Assets.Scripts
 
         public void TryUpdateCellHeight(List<Vector3> Coords, float dY)
         {
-            foreach (Vector3 Coord in Coords)
+            for(int i =0;i< Coords.Count;i++)
             {
+                Vector3 Coord = Coords[i];
                 if (Coord.x < 0 || Coord.z < 0)
                 {
                     Coords.Remove(Coord);

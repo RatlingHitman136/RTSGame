@@ -38,16 +38,25 @@ namespace Assets.Scripts
             {
                 if (HexagonCoord.x != 0)
                 {
-                    ColumsToUpdate.Add(hexColumnRenderers[(int)HexagonCoord.x - 1]);
-                    XCoordColumsToUpdate.Add((int)HexagonCoord.x - 1);
+                    if (!XCoordColumsToUpdate.Contains((int)HexagonCoord.x - 1))
+                    {
+                        ColumsToUpdate.Add(hexColumnRenderers[(int)HexagonCoord.x - 1]);
+                        XCoordColumsToUpdate.Add((int)HexagonCoord.x - 1);
+                    }
                 }
                 if (HexagonCoord.x != hexColumnRenderers.Length - 1)
                 {
-                    ColumsToUpdate.Add(hexColumnRenderers[(int)HexagonCoord.x + 1]);
-                    XCoordColumsToUpdate.Add((int)HexagonCoord.x + 1);
+                    if (!XCoordColumsToUpdate.Contains((int)HexagonCoord.x + 1))
+                    {
+                        ColumsToUpdate.Add(hexColumnRenderers[(int)HexagonCoord.x + 1]);
+                        XCoordColumsToUpdate.Add((int)HexagonCoord.x + 1);
+                    }
                 }
-                    ColumsToUpdate.Add(hexColumnRenderers[(int)HexagonCoord.x]);
-                XCoordColumsToUpdate.Add((int)HexagonCoord.x);
+                if (!XCoordColumsToUpdate.Contains((int)HexagonCoord.x ))
+                {
+                    ColumsToUpdate.Add(hexColumnRenderers[(int)HexagonCoord.x ]);
+                    XCoordColumsToUpdate.Add((int)HexagonCoord.x);
+                }
             }
 
             for (int i = 0; i < ColumsToUpdate.Count; i++)

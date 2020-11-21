@@ -18,7 +18,6 @@ public class TestRayCast : MonoBehaviour
         {
             if (hexGrid.TryRaycastHexGrid(out Vector3 output, Camera.main.ScreenPointToRay(Input.mousePosition))) 
             {
-                Debug.Log(output);
                 worldEditor.TryUpdateCellHeight(output, .5f);
             }
                 
@@ -27,7 +26,6 @@ public class TestRayCast : MonoBehaviour
         {
             if (hexGrid.TryRaycastHexGrid(out Vector3 output, Camera.main.ScreenPointToRay(Input.mousePosition))) 
             {
-                Debug.Log(output);
                 worldEditor.TryUpdateCellHeight(output, -.5f);
             }
 
@@ -37,7 +35,6 @@ public class TestRayCast : MonoBehaviour
         {
             if (hexGrid.TryRaycastHexGrid(out Vector3 output, Camera.main.ScreenPointToRay(Input.mousePosition)))
             {
-                Debug.Log(output);
                 worldEditor.TryUpdateCellHeightInRadius(output,.5f,3);
             }
         }
