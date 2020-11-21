@@ -23,15 +23,16 @@ namespace Assets.Scripts
 
         public void TryUpdateCellHeight(List<Vector3> Coords, float dY)
         {
-            for(int i =0;i< Coords.Count;i++)
+            for (int i = 0; i < Coords.Count; i++)
             {
-                Vector3 Coord = Coords[i];
-                if (Coord.x < 0 || Coord.z < 0)
+                if (Coords[i].x < 0 || Coords[i].z < 0 || Coords[i].x > MapData.width - 1 || Coords[i].z > MapData.height - 1)
                 {
-                    Coords.Remove(Coord);
+                    Coords.RemoveAt(i);
+                    i--;
                     continue;
                 }
-                MapData.HeightMap[(int)Coord.z * MapData.width + (int)Coord.x] += dY;
+                else
+                    MapData.HeightMap[(int)Coords[i].z * MapData.width + (int)Coords[i].x] += dY;
             }
             hexGridRenderer.UpdateHexGridMesh(Coords);
             hexGridColiderer.ReUpdateAllColiders();
