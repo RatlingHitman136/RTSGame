@@ -9,29 +9,53 @@ namespace Assets.Scripts
 {
     public class HexGridRenderer
     {
-        HexGridData UploadedData;
+        HexGridData MapData;
 
         HexColumnRenderer[] hexColumnRenderers;
+
         public HexGridRenderer(HexGrid hexGrid)
         {
-            this.UploadedData = hexGrid.MapData;
-            hexColumnRenderers = new HexColumnRenderer[UploadedData.width];
+            this.MapData = hexGrid.MapData;
+            hexColumnRenderers = new HexColumnRenderer[MapData.width];
 
             GameObject MeshPart = new GameObject("Mesh Part");
 
             MeshPart.transform.parent = hexGrid.transform;
 
-            for (int x = 0;x < UploadedData.width;x++)
+            for (int x = 0;x < MapData.width;x++)
             {
                 InitColumn(x, hexGrid, MeshPart.transform);
             }
 
         }
 
-        //public UpdateHexGridMesh(Vector3[] HexagonsToUpdate)
-        //{
+        public void UpdateHexGridMesh(Vector3[] HexagonsToUpdate)
+        {
+            List<HexColumnRenderer> ColumsToUpdate = new List<HexColumnRenderer>();
 
-        //}
+            foreach(Vector3 HexagonCoord in HexagonsToUpdate)
+            {
+                if (HexagonCoord.x == 0)
+                {
+                    ColumsToUpdate.Add(hexColumnRenderers[(int)HexagonCoord.x]);
+                }
+                else
+                {
+                    ColumsToUpdate.Add(hexColumnRenderers[(int)HexagonCoord.x]);
+                    ColumsToUpdate.Add(hexColumnRenderers[(int)HexagonCoord.x-1]);
+                }
+            }
+
+            Debug.Log(ColumsToUpdate.Count);
+            //for (int i = 0; i < ColumsToUpdate.Count; i++)
+            //{
+            //    ColumsToUpdate[i].UpdateColumn(i);
+            //}
+            for(int x = 0;x< MapData.width;x++)
+            {
+                hexColumnRenderers[x].UpdateColumn(x);
+            }
+        }
 
         void InitColumn(int x, HexGrid hexGrid, Transform MeshPart)
         {

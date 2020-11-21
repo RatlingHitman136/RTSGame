@@ -14,7 +14,7 @@ public class HexGrid : MonoBehaviour
 
     private void Awake()
     {
-        MapData = new HexGridData(60, 20, 3,1f, Default);
+        MapData = new HexGridData(70, 30, 3,1f, Default);
 
         InitWorld();
     }
@@ -31,6 +31,15 @@ public class HexGrid : MonoBehaviour
         #endregion
     }
 
+    public void UpdateCellHeight(Vector3 Coord, float dY)
+    {
+        MapData.HeightMap[(int)Coord.z * MapData.width + (int)Coord.x]+=dY;
+        Vector3[] Coords = new Vector3[1];
+        Coords[0] = Coord;
+        hexGridRenderer.UpdateHexGridMesh(Coords);
+        hexGridColiderer.ReUpdateAllColiders();
+    }
+
     public bool TryRaycastHexGrid(out Vector3 output, Ray rayToCast)
     {
         return hexGridColiderer.TryRaycastHexGrid(out output, rayToCast);
@@ -40,7 +49,6 @@ public class HexGrid : MonoBehaviour
 
 public struct HexGridData
 {
-
     public int width;
     public int height;
 

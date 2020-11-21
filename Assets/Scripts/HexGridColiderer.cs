@@ -56,7 +56,7 @@ namespace Assets.Scripts
         }
 
 
-        public bool TryRaycastHexGrid(out Vector3 output, Ray rayToCast)
+        public bool TryRaycastHexGrid(out Vector3 HexOutput, Ray rayToCast)
         {
             List<RaycastHit> hits = Physics.RaycastAll(rayToCast,Mathf.Infinity).ToList();
             hits = hits.OrderBy(h => h.distance).ToList();
@@ -69,13 +69,12 @@ namespace Assets.Scripts
                 HexCoords = new Vector3(Mathf.Clamp(HexCoords.x, 0, UploadedMapData.width - 1), HexCoords.z, Mathf.Clamp(HexCoords.z, 0, UploadedMapData.height - 1));
                 if (Mathf.Approximately(hit.point.y, UploadedMapData.HeightMap[(int)HexCoords.z* UploadedMapData.width+ (int)HexCoords.x]))
                 {
-                    output = new Vector3(hit.point.x, UploadedMapData.HeightMap[(int)HexCoords.z * UploadedMapData.width + (int)HexCoords.x], hit.point.z);
-                    Debug.Log(output);
+                    HexOutput = HexCoords;
                     return true;
                 }
                 else
                 {
-                    Heights.Add(new Vector3(hit.point.x, UploadedMapData.HeightMap[(int)HexCoords.z * UploadedMapData.width + (int)HexCoords.x], hit.point.z));
+                    Heights.Add(HexCoords);
                 }
             }
 
@@ -83,13 +82,13 @@ namespace Assets.Scripts
             {
                 if (Heights[i].y > Heights[i - 1].y)
                 {
-                    output = Heights[i];
-                    Debug.Log(output);
+                    HexOutput = Heights[i];
+                    Debug.Log(HexOutput);
                     return true;
                 }
             }
 
-            output = new Vector3();
+            HexOutput = new Vector3();
             return false;
 
         }

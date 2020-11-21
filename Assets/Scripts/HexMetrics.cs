@@ -61,7 +61,7 @@ namespace Assets.Scripts
 				}
 			}
 
-			return new Vector3(iX - iZ/2, 0 ,iZ);
+			return new Vector3(iX + iZ/2, 0 ,iZ);
 		}
 
 	}

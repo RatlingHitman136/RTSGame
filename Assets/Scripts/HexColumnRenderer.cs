@@ -10,17 +10,21 @@ namespace Assets.Scripts
     public class HexColumnRenderer
     {
         HexGridData UploadedData;
-
+        GameObject Column;
 
         public HexColumnRenderer(int x,HexGrid hexGrid, Transform MeshPart)
         {
             this.UploadedData = hexGrid.MapData;
 
-            GameObject Column = new GameObject("Column " + x, typeof(MeshRenderer),typeof(MeshFilter));
+            Column = new GameObject("Column " + x, typeof(MeshRenderer),typeof(MeshFilter));
             Column.transform.localPosition = new Vector3(HexMetrics.innerRadius*2*UploadedData.cellSize*x,0,0);
             Column.transform.parent = MeshPart;
 
+            UpdateColumn(x);
+        }
 
+        public void UpdateColumn(int x)
+        {
             Mesh ColumnMesh = new Mesh();
 
             List<Vector3> Vertices = new List<Vector3>();
@@ -42,6 +46,7 @@ namespace Assets.Scripts
             Column.GetComponent<MeshFilter>().mesh = ColumnMesh;
             Column.GetComponent<MeshRenderer>().material = UploadedData.Default;
         }
+
 
         void InitCell(ref List<Vector3> Vertices,ref List<int> Tris,int x, int z,float HexSizeWithPadding)
         {
